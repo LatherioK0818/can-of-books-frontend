@@ -12,7 +12,7 @@ The Can of Books App is a small web application designed to track and catalog im
 To build and run this app locally, follow these steps:
 
 1. Clone the front-end repository (can-of-books-frontend) from [GitHub](https://github.com/AgateHunter/can-of-books-frontend.git).
-2. Clone the back-end repository (can-of-books-backend) from [GitHub](back-end-repo-link).
+2. Clone the back-end repository (can-of-books-backend) from [GitHub](https://github.com/LatherioK0818/can-of-books-backend.git).
 3. Add all team members as collaborators to both repositories.
 4. Review and update the .gitignore files, and add blank .env files to prevent sensitive information from being pushed to GitHub.
 5. Deploy both the front-end and back-end to the cloud to check for proof-of-life indicators.

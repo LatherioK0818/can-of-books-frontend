@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Carousel from 'react-bootstrap/Carousel';
-import Routes from './About'; 
-import { Link, Route } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import EditBookFormModal from './EditBookFormModal';
+import AddBookButton from './AddBook';
 
-const SERVER = 'https://localhost:3001';
+const SERVER = import.meta.env.VITE_API_SERVER_URL;
 
 const BestBooks = () => {
   const [books, setBooks] = useState([]);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [selectedBook, setSelectedBook] = useState(null);
 
   const fetchBooks = async () => {
     try {
@@ -17,20 +21,23 @@ const BestBooks = () => {
       setBooks(response.data);
     } catch (error) {
       console.error('Error fetching books:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const addBook = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post(`${SERVER}/books`, { title, description });
-      setBooks([...books, response.data]);
-      setTitle('');
-      setDescription('');
-    } catch (error) {
-      console.error('Error adding book:', error);
-    }
-  };
+const addBook = async (formData) => {
+  try {
+    const response = await axios.post(`${SERVER}/books`, formData);
+    setBooks([...books, response.data]);
+    // Clear the form inputs
+    setTitle('');
+    setDescription('');
+  } catch (error) {
+    console.error('Error adding book:', error);
+  }
+};
+
 
   const deleteBook = async (id) => {
     try {
@@ -41,13 +48,19 @@ const BestBooks = () => {
     }
   };
 
+  const handleEditBook = (updatedBook) => {
+    setBooks((prevBooks) =>
+      prevBooks.map((book) => (book._id === updatedBook._id ? updatedBook : book))
+    );
+  };
+
   useEffect(() => {
     fetchBooks();
   }, []);
 
   return (
     <>
-        <nav>
+      <nav>
         <Link to="/">Home</Link>
         <Link to="/about">About</Link>
       </nav>
@@ -56,7 +69,12 @@ const BestBooks = () => {
       <hr />
 
       <form onSubmit={addBook}>
-        <input name="title" placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} />
+        <input
+          name="title"
+          placeholder="Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
         <input
           name="description"
           placeholder="Description"
@@ -72,15 +90,28 @@ const BestBooks = () => {
         <Carousel style={{ padding: '5em', background: '#111' }}>
           {books.map((book) => (
             <Carousel.Item key={book._id}>
-              <img src={`https://placehold.co/800x400?text=${book.title}`} height="400" width="100%" alt={book.title} />
+              <img
+                src={`https://placehold.co/800x400?text=${book.title}`}
+                height="400"
+                width="100%"
+                alt={book.title}
+              />
               <Carousel.Caption>
                 <p>{book.description}</p>
-                <span
-                  onClick={() => deleteBook(book._id)}
-                  style={{ marginLeft: '.5em', color: 'red', cursor: 'pointer' }}
-                >
-                  X
-                </span>
+                <div>
+                  <button
+                    onClick={() => {
+                      setSelectedBook(book);
+                      setShowEditModal(true);
+                    }}
+                    variant="secondary"
+                  >
+                    Edit Book
+                  </button>
+                  <button onClick={() => deleteBook(book._id)} style={{ marginLeft: '1em' }}>
+                    Delete Book
+                  </button>
+                </div>
               </Carousel.Caption>
             </Carousel.Item>
           ))}
@@ -88,11 +119,19 @@ const BestBooks = () => {
       ) : (
         <p>No Books Found :(</p>
       )}
-          <Routes>
-      
-          </Routes>
+
+      {showEditModal && (
+        <EditBookFormModal
+          bookData={selectedBook}
+          closeModal={() => setShowEditModal(false)}
+          handleEditBook={handleEditBook}
+        />
+      )}
+
+      <AddBookButton  />
     </>
   );
 };
 
 export default BestBooks;
+

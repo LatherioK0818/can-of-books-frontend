@@ -7,9 +7,12 @@ const About = () => {
     <>
       <h2>About Us</h2>
       <p>This is a project developed by Latherio Kidd & Natalie Stone.</p>
+        <>
       <p>Find us on GitHub:
-      <a href="https://github.com/LatherioK0818">GitHub</a>
-      <a href="https://github.com/AgateHunter">GitHub</a></p>
+      <a href="https://github.com/LatherioK0818">Latherio's GitHub</a>
+  
+      <a href="https://github.com/AgateHunter"> Natalie's GitHub</a></p>
+      </>
     </>
     
   );

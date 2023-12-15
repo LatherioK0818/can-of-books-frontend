@@ -97,3 +97,7 @@ We would like to give credit to the instructional team for providing the lab ins
 ## Light house
 
 ![Alt text](image.png)
+
+![Alt text](image.png)
+
+![Alt text](image-1.png)

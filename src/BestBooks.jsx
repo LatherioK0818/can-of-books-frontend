@@ -26,9 +26,9 @@ const BestBooks = () => {
     }
   };
 
-const addBook = async (formData) => {
+const addBook = async (books) => {
   try {
-    const response = await axios.post(`${SERVER}/books`, formData);
+    const response = await axios.post(`${SERVER}/books`, books);
     setBooks([...books, response.data]);
     // Clear the form inputs
     setTitle('');
@@ -128,7 +128,7 @@ const addBook = async (formData) => {
         />
       )}
 
-      <AddBookButton  />
+      <AddBookButton handleAddBook={addBook} />
     </>
   );
 };

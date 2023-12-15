@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 
+const SERVER =import.meta.env.VITE_API_SERVER_URL;
+
 const EditBookFormModal = ({ bookData, closeModal, handleEditBook }) => {
   const [formData, setFormData] = useState({ title: bookData.title, description: bookData.description });
 
@@ -12,7 +14,7 @@ const EditBookFormModal = ({ bookData, closeModal, handleEditBook }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch(`/books/${bookData._id}`, {
+      const response = await fetch(`${SERVER}/books/${bookData._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
